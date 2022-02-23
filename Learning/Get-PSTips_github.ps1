@@ -1,0 +1,1 @@
+#personal access token is in developer settings. A new token can be created for each application. VSCodium uses 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
