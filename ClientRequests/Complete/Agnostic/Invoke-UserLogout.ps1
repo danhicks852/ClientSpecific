@@ -1,4 +1,5 @@
 <#
+#git test
 .SYNOPSIS
     Logs a specified user(s) out of the system
 .EXAMPLE
