@@ -1,3 +1,5 @@
+#Get-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+#kodytest guid: S-1-5-21-122081067-3812022237-3217376748-12859
 #region Template
 <#
 .SYNOPSIS
@@ -135,7 +137,7 @@ function Set-AllProfileFolders {
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "Desktop" -SID $sid -Value "$userProfileDirectory\Desktop" -PropertyType DWORD -ErrorAction SilentlyContinue
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "My Pictures" -SID $sid -Value "$userProfileDirectory\Pictures" -PropertyType DWORD -ErrorAction SilentlyContinue
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "My Music" -SID $sid -Value "$userProfileDirectory\Music" -PropertyType DWORD -ErrorAction SilentlyContinue
-    Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "{374DE290-123F-4565-9164-39C4925E467B}" -SID $user.SID -Value "$userProfileDirectory\Downloads" -PropertyType DWORD -ErrorAction SilentlyContinue
+    Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "{374DE290-123F-4565-9164-39C4925E467B}" -SID $sid -Value "$userProfileDirectory\Downloads" -PropertyType DWORD -ErrorAction SilentlyContinue
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "Personal" -SID $sid -Value "$userProfileDirectory\Documents" -PropertyType DWORD -ErrorAction SilentlyContinue
 }
 $patternSID = '((S-1-5-21)|(S-1-12-1))-\d+-\d+\-\d+\-\d+$'
@@ -157,7 +159,7 @@ ProfileImagePath
             reg load HKU\$($profile.SID) $($profile.UserHive) | Out-Null
         }
         $currentShellFolders = Get-ItemProperty -Path "Registry::HKEY_USERS\$($profile.SID)\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
-        if ($item.SID -in $UnloadedHives.SID) {
+        if ($profile.SID -in $UnloadedHives.SID) {
             ### Garbage collection and closing of ntuser.dat ###
             [gc]::Collect()
             reg unload HKU\$($profile.SID) | Out-Null
