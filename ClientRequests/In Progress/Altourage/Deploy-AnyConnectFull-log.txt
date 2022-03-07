@@ -1,0 +1,68 @@
+2022-03-04 15:54:12  INIT     -----------------------------------------------
+2022-03-04 15:54:12  INIT     Deploy-AnyConnectFull
+2022-03-04 15:54:12  INIT     System: PRLPTUS-04
+2022-03-04 15:54:12  INIT     User: dan.hicks
+2022-03-04 15:54:12  INIT     OS Bitness: AMD64
+2022-03-04 15:54:12  INIT     PowerShell Bitness: 64
+2022-03-04 15:54:12  INIT     PowerShell Version: 2021
+2022-03-04 15:54:12  INIT     -----------------------------------------------
+2022-03-04 15:54:12  LOG      Downloading anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi
+2022-03-04 15:54:27  LOG      Downloading anyconnect-win-4.10.04071-amp-predeploy-k9.msi
+2022-03-04 15:54:31  LOG      Downloading anyconnect-win-4.10.04071-dart-predeploy-k9.msi
+2022-03-04 15:54:34  LOG      Downloading anyconnect-win-4.10.04071-gina-predeploy-k9.msi
+2022-03-04 15:54:38  LOG      Downloading anyconnect-win-4.10.04071-iseposture-predeploy-k9.msi
+2022-03-04 15:54:42  LOG      Downloading anyconnect-win-4.10.04071-nam-predeploy-k9.msi
+2022-03-04 15:54:49  LOG      Downloading anyconnect-win-4.10.04071-nvm-predeploy-k9.msi
+2022-03-04 15:54:56  LOG      Downloading anyconnect-win-4.10.04071-posture-predeploy-k9.msi
+2022-03-04 15:55:13  LOG      Downloading anyconnect-win-4.10.04071-umbrella-predeploy-k9.msi
+2022-03-04 15:55:19  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco//json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella
+2022-03-04 15:57:12  INIT     Bootstrap already loaded.
+2022-03-04 15:57:12  LOG      Downloading /anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi
+2022-03-04 15:57:33  LOG      Downloading /anyconnect-win-4.10.04071-amp-predeploy-k9.msi
+2022-03-04 15:57:37  LOG      Downloading /anyconnect-win-4.10.04071-dart-predeploy-k9.msi
+2022-03-04 15:57:44  LOG      Downloading /anyconnect-win-4.10.04071-gina-predeploy-k9.msi
+2022-03-04 15:57:47  LOG      Downloading /anyconnect-win-4.10.04071-iseposture-predeploy-k9.msi
+2022-03-04 15:57:52  LOG      Downloading /anyconnect-win-4.10.04071-nam-predeploy-k9.msi
+2022-03-04 15:57:59  LOG      Downloading /anyconnect-win-4.10.04071-nvm-predeploy-k9.msi
+2022-03-04 15:58:09  LOG      Downloading /anyconnect-win-4.10.04071-posture-predeploy-k9.msi
+2022-03-04 15:58:25  LOG      Downloading /anyconnect-win-4.10.04071-umbrella-predeploy-k9.msi
+2022-03-04 15:58:34  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella
+2022-03-04 16:04:15  INIT     Bootstrap already loaded.
+2022-03-04 16:04:15  LOG      Downloading /anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi
+2022-03-04 16:04:33  LOG      Downloading /anyconnect-win-4.10.04071-amp-predeploy-k9.msi
+2022-03-04 16:04:37  LOG      Downloading /anyconnect-win-4.10.04071-dart-predeploy-k9.msi
+2022-03-04 16:04:44  LOG      Downloading /anyconnect-win-4.10.04071-gina-predeploy-k9.msi
+2022-03-04 16:04:48  LOG      Downloading /anyconnect-win-4.10.04071-iseposture-predeploy-k9.msi
+2022-03-04 16:04:53  LOG      Downloading /anyconnect-win-4.10.04071-nam-predeploy-k9.msi
+2022-03-04 16:05:00  LOG      Downloading /anyconnect-win-4.10.04071-nvm-predeploy-k9.msi
+2022-03-04 16:05:07  LOG      Downloading /anyconnect-win-4.10.04071-posture-predeploy-k9.msi
+2022-03-04 16:05:22  LOG      Downloading /anyconnect-win-4.10.04071-umbrella-predeploy-k9.msi
+2022-03-04 16:05:28  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.jsonhttps://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella
+2022-03-04 16:07:10  INIT     Bootstrap already loaded.
+2022-03-04 16:07:10  LOG      Downloading /anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi
+2022-03-04 16:07:13  LOG      Downloading /anyconnect-win-4.10.04071-amp-predeploy-k9.msi
+2022-03-04 16:07:15  LOG      Downloading /anyconnect-win-4.10.04071-dart-predeploy-k9.msi
+2022-03-04 16:07:16  LOG      Downloading /anyconnect-win-4.10.04071-gina-predeploy-k9.msi
+2022-03-04 16:07:18  LOG      Downloading /anyconnect-win-4.10.04071-iseposture-predeploy-k9.msi
+2022-03-04 16:07:20  LOG      Downloading /anyconnect-win-4.10.04071-nam-predeploy-k9.msi
+2022-03-04 16:07:22  LOG      Downloading /anyconnect-win-4.10.04071-nvm-predeploy-k9.msi
+2022-03-04 16:07:24  LOG      Downloading /anyconnect-win-4.10.04071-posture-predeploy-k9.msi
+2022-03-04 16:07:27  LOG      Downloading /anyconnect-win-4.10.04071-umbrella-predeploy-k9.msi
+2022-03-04 16:07:29  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.jsonhttps://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.jsonhttps://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella
+2022-03-04 16:09:26  INIT     Bootstrap already loaded.
+2022-03-04 16:09:26  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella
+2022-03-04 16:09:49  INIT     Bootstrap already loaded.
+2022-03-04 16:09:49  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella
+2022-03-04 16:10:27  INIT     Bootstrap already loaded.
+2022-03-04 16:10:27  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella\OrgInfo.json
+2022-03-04 16:28:30  INIT     Bootstrap already loaded.
+2022-03-04 16:28:30  LOG      Downloading /anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi
+2022-03-04 16:28:33  LOG      Downloading /anyconnect-win-4.10.04071-amp-predeploy-k9.msi
+2022-03-04 16:28:34  LOG      Downloading /anyconnect-win-4.10.04071-dart-predeploy-k9.msi
+2022-03-04 16:28:36  LOG      Downloading /anyconnect-win-4.10.04071-gina-predeploy-k9.msi
+2022-03-04 16:28:38  LOG      Downloading /anyconnect-win-4.10.04071-iseposture-predeploy-k9.msi
+2022-03-04 16:28:40  LOG      Downloading /anyconnect-win-4.10.04071-nam-predeploy-k9.msi
+2022-03-04 16:28:42  LOG      Downloading /anyconnect-win-4.10.04071-nvm-predeploy-k9.msi
+2022-03-04 16:28:44  LOG      Downloading /anyconnect-win-4.10.04071-posture-predeploy-k9.msi
+2022-03-04 16:28:46  LOG      Downloading /anyconnect-win-4.10.04071-umbrella-predeploy-k9.msi
+2022-03-04 16:28:55  LOG      Downloading JSON file: https://file.provaltech.com/repo/kaseya/clients/altourage/cisco/json/fwrv/OrgInfo.json to C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella\OrgInfo.json
