@@ -49,7 +49,7 @@ $files = @(
 #download files
 foreach ($file in $files){
     Write-Log -Text "Downloading $file" -Type LOG
-    Remove-Item -FilePath "$workingPath\$file" -ErrorAction SilentlyContinue
+    Remove-Item "$workingPath\$file" -ErrorAction SilentlyContinue
     (New-Object System.Net.WebClient).DownloadFile("$repoURL/$file","$workingPath\$file")
     if(!(Test-Path -Path "$workingPath\$file" -Pathtype Leaf)){
         Write-Log -Text "File was not successfully downloaded. Terminating." -Type ERROR
@@ -69,26 +69,27 @@ Remove-Item "$jsonDir\OrgInfo.json" -ErrorAction SilentlyContinue
 #Deploy Core
 $installCore = Start-Process msiexec.exe -Wait -ArgumentList "/package $workingPath\anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi /norestart /quiet"
 $exitCode = $installCore.ExitCode
-if(!(Test-Path -Path "C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpnagent.exe" -Pathtype Leaf)){
+<# if(!($exitCode -gt 1)){
     Write-Log -Text "Core Module Failed to install with exit code $exitCode! Exiting procedure."
     exit
-}
+} #>
 
 #Deploy Modules
 foreach($file in $files){
     Write-Log -Text "Installing $file" -Type LOG
     $install = Start-Process msiexec.exe -Wait -ArgumentList "/package $workingPath\$file /norestart /quiet"
-    $exit = $install.ExitCode
-    if(!($exit = 0)){
+<#     $exit = $install.ExitCode
+    if(!($exit -gt 1)){
         Write-Log -Text "$file failed to install with exit code $exit." -Type ERROR
         $moduleVerifyFailed = $moduleVerifyFailed + 1
+        return $moduleVerifyFailed
     }else{
         Write-Log -Text "$file Installed Successfully, or was already installed." -Type LOG
-    }
+    } #>
 }
-if (!($moduleVerifyFailed = 0)){
+<# if (!($moduleVerifyFailed -eq 0)){
     Write-Log -Text "$moduleverifyFailed modules failed to install. Please check the error log for further details." -Type ERROR
 }
 else{
     Write-Log -Text "All Modules installed. Process complete." -Type LOG
-}
+} #>
