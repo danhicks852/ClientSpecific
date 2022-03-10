@@ -4,10 +4,8 @@
     Updates UEFI HP Machine to latest firmware version
 .EXAMPLE
     C:\>./Invoke-BIOSUpgradeHP.ps1
-.PARAMETER -param
-    Describe each paramater your script uses
 .NOTES
-    Additional script notes here.
+    Written by Dan Hicks of ProVal Technologies for Sysintegrators
 #>
 #Configure Paramaters and validate input if needed.
 #no params needed
