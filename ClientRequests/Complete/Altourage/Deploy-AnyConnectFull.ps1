@@ -16,15 +16,16 @@
     Written by Dan Hicks @ ProVal Technologies for Altourage.
 #>
 #Configure Paramaters and validate input if needed.
-param ([Parameter(Mandatory=$true)][string]$OrgName)
+param ([Parameter(Mandatory = $true)][string]$OrgName)
 #$OrgName = "fwrv"
 ### Bootstrap ###
 #The bootstrap loads Logging, Chocolatey, environment paths, common variables, powershell updates. It should be included on ALL ProVal powershell scripts developed.
-if(-not $bootstrapLoaded) {
+if (-not $bootstrapLoaded) {
     [Net.ServicePointManager]::SecurityProtocol = [Enum]::ToObject([Net.SecurityProtocolType], 3072)
     Invoke-Expression (New-Object System.Net.WebClient).DownloadString("https://file.provaltech.com/repo/script/Bootstrap.ps1")
     Set-Environment
-} else {
+}
+else {
     Write-Log -Text "Bootstrap already loaded." -Type INIT
 }
 ### Process ###
@@ -34,7 +35,7 @@ $repoURL = "https://file.provaltech.com/repo/kaseya/clients/altourage/cisco"
 $jsonURL = "$repoURL/json/$OrgName/OrgInfo.json"
 $jsonDir = "$env:ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Umbrella"
 $appDir = "$env:ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\"
-$moduleVerifyFailed = 0
+#$moduleVerifyFailed = 0
 $files = @(
     "anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi",
     "anyconnect-win-4.10.04071-amp-predeploy-k9.msi",
@@ -47,15 +48,15 @@ $files = @(
     "anyconnect-win-4.10.04071-umbrella-predeploy-k9.msi"
 )
 #download files
-foreach ($file in $files){
+foreach ($file in $files) {
     Write-Log -Text "Downloading $file" -Type LOG
     Remove-Item "$workingPath\$file" -ErrorAction SilentlyContinue
-    (New-Object System.Net.WebClient).DownloadFile("$repoURL/$file","$workingPath\$file")
-    if(!(Test-Path -Path "$workingPath\$file" -Pathtype Leaf)){
+    (New-Object System.Net.WebClient).DownloadFile("$repoURL/$file", "$workingPath\$file")
+    if (!(Test-Path -Path "$workingPath\$file" -Pathtype Leaf)) {
         Write-Log -Text "File was not successfully downloaded. Terminating." -Type ERROR
         exit
     }
-    else{
+    else {
         Write-Log -Text "$file downloaded succesfully." -Type LOG
     }
 }
@@ -64,21 +65,21 @@ foreach ($file in $files){
 New-Item -Path $appDir -Name "Umbrella" -ItemType Directory -ErrorAction SilentlyContinue
 Write-Log -Text "Downloading JSON file: $jsonURL to $jsonDir\OrgInfo.json" -Type LOG
 Remove-Item "$jsonDir\OrgInfo.json" -ErrorAction SilentlyContinue
-(New-Object System.Net.WebClient).DownloadFile($jsonURL,"$jsonDir\OrgInfo.json")
+(New-Object System.Net.WebClient).DownloadFile($jsonURL, "$jsonDir\OrgInfo.json")
 
 #Deploy Core
-$installCore = Start-Process msiexec.exe -Wait -ArgumentList "/package $workingPath\anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi /norestart /quiet"
-$exitCode = $installCore.ExitCode
+<#$installCore = #>Start-Process msiexec.exe -Wait -ArgumentList "/package $workingPath\anyconnect-win-4.10.04071-core-vpn-predeploy-k9.msi /norestart /quiet"
+#$exitCode = $installCore.ExitCode
 <# if(!($exitCode -gt 1)){
     Write-Log -Text "Core Module Failed to install with exit code $exitCode! Exiting procedure."
     exit
 } #>
 
 #Deploy Modules
-foreach($file in $files){
+foreach ($file in $files) {
     Write-Log -Text "Installing $file" -Type LOG
-    $install = Start-Process msiexec.exe -Wait -ArgumentList "/package $workingPath\$file /norestart /quiet"
-<#     $exit = $install.ExitCode
+    <#$install = #>Start-Process msiexec.exe -Wait -ArgumentList "/package $workingPath\$file /norestart /quiet"
+    <#     $exit = $install.ExitCode
     if(!($exit -gt 1)){
         Write-Log -Text "$file failed to install with exit code $exit." -Type ERROR
         $moduleVerifyFailed = $moduleVerifyFailed + 1

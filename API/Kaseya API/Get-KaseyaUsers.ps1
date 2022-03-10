@@ -1,11 +1,11 @@
 [CmdletBinding()]
- param (
+param (
     [Parameter(Mandatory)][string]$Token,
     [Parameter(Mandatory)][string]$URL
 )
 $headers = @{
-    Authorization="Bearer $Token"
-    Method="GET"
+    Authorization = "Bearer $Token"
+    Method        = "GET"
 }
 
 $path = "$PSScriptRoot\UserReports"

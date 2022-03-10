@@ -8,11 +8,11 @@ function RandomNumberGen([int]$numberOfDigits) {
     $numbers = [byte[]]::new($numberOfDigits * 2)
     $rng.GetNonZeroBytes($numbers)
     $result = ""
-    for($i = 0; $i -lt $numberOfDigits; $i++) {
+    for ($i = 0; $i -lt $numberOfDigits; $i++) {
         $result += $numbers[$i].ToString()
     }
-    $result = $result -replace "0",""
-    $result.Substring(1,$numberOfDigits)
+    $result = $result -replace "0", ""
+    $result.Substring(1, $numberOfDigits)
 }
 
 function CalculateHash {
@@ -22,15 +22,16 @@ function CalculateHash {
         [Parameter(Mandatory)][string]$HashingAlgorithm
     )
     [byte[]]$arrByte = $null
-    if($HashingAlgorithm -eq "SHA-1") {
+    if ($HashingAlgorithm -eq "SHA-1") {
         $hash = [System.Security.Cryptography.SHA1Managed]::new()
         $arrByte = $hash.ComputeHash([System.Text.ASCIIEncoding]::ASCII.GetBytes($Value))
-    } elseif ($HashingAlgorithm -eq "SHA-256") {
+    }
+    elseif ($HashingAlgorithm -eq "SHA-256") {
         $hash = [System.Security.Cryptography.SHA256Managed]::new()
         $arrByte = $hash.ComputeHash([System.Text.ASCIIEncoding]::ASCII.GetBytes($Value))
     }
     $s = ""
-    foreach($byte in $arrByte) {
+    foreach ($byte in $arrByte) {
         $s += $byte.ToString("x2")
     }
     return $s

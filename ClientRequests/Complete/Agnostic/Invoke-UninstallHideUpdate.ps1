@@ -12,17 +12,18 @@ This powershell script will require machines to be manually rebooted if reboot i
 #changelog 1/28/22 switched to stopping services, which also seems to work. Kept pause code for reference or reversion if necesarry.
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory=$true)][string[]]$KBArticles
+    [Parameter(Mandatory = $true)][string[]]$KBArticles
 )
 ### Bootstrap ###
-if(-not $bootstrapLoaded) {
+if (-not $bootstrapLoaded) {
     [Net.ServicePointManager]::SecurityProtocol = [Enum]::ToObject([Net.SecurityProtocolType], 3072)
     Invoke-Expression (New-Object System.Net.WebClient).DownloadString("https://file.provaltech.com/repo/script/Bootstrap.ps1")
     Set-Environment
     Update-PowerShell
-    if($powershellUpgraded) { return }
-    if($powershellOutdated) { return }
-} else {
+    if ($powershellUpgraded) { return }
+    if ($powershellOutdated) { return }
+}
+else {
     Write-Log -Text "Bootstrap already loaded." -Type INIT
 }
 ### Process ###
@@ -40,12 +41,12 @@ New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU' -For
 New-ItemProperty -Path  'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU' -Name 'NoAutoUpdate' -PropertyType DWORD -Value 1
 }#>
 
-function Set-UpdateServiceStatus{
+function Set-UpdateServiceStatus {
     [CmdletBinding()]
-        param (
-            [Parameter(Mandatory=$true)][ValidateScript("^(start|stop)")][string[]]$ServiceAction
-        )
-    switch ($ServiceAction){
+    param (
+        [Parameter(Mandatory = $true)][ValidateScript("^(start|stop)")][string[]]$ServiceAction
+    )
+    switch ($ServiceAction) {
         "start" { 
             Start-Service -Name "wuauserv" 
             Start-Service -Name "BITS"
@@ -64,16 +65,17 @@ Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$f
 if (-not(Get-InstalledModule PSWindowsUpdate -ErrorAction silentlycontinue)) {
     Install-Module -Name PSWindowsUpdate -Force -Confirm:$false
     Write-Log -Text "PSWindowsUpdate Module Installed and Loaded." -Type LOG
-} else {
+}
+else {
     Import-Module PSWindowsUpdate -ErrorAction silentlycontinue
     Write-Log -Text "PSWindowsUpdate Module Loaded." -Type LOG
 }
 #Set-updatepause
 Set-UpdateServiceStatus -ServiceAction stop
-foreach($KBArticle in $KBArticles){
-Remove-WindowsUpdate -KBArticleID $KBArticle
-Write-Log -Text $KBArticle" Uninstalled." -Type LOG
-Get-WindowsUpdate -KBArticleID $KBArticle -Hide -Confirm:$False
-Write-Log -Text $KBArticle" Hidden from Windows Update." -Type LOG
+foreach ($KBArticle in $KBArticles) {
+    Remove-WindowsUpdate -KBArticleID $KBArticle
+    Write-Log -Text $KBArticle" Uninstalled." -Type LOG
+    Get-WindowsUpdate -KBArticleID $KBArticle -Hide -Confirm:$False
+    Write-Log -Text $KBArticle" Hidden from Windows Update." -Type LOG
 }
 Set-UpdateServiceStatus -ServiceAction start

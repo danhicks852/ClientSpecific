@@ -15,12 +15,13 @@ param (
 Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
 if (-not(Get-InstalledModule PSWindowsUpdate -ErrorAction silentlycontinue)) {
     Install-Module -Name PSWindowsUpdate -Force -Confirm:$false
-} else {
+}
+else {
     Import-Module PSWindowsUpdate -ErrorAction silentlycontinue
 }
 foreach ($KBArticle in $KBArticles) {
     #TODO Validate Params
-    if (-not($i.StartsWith("KB"))){
+    if (-not($i.StartsWith("KB"))) {
         Write-Host "$i not a valid KB Article"
         continue  
     }

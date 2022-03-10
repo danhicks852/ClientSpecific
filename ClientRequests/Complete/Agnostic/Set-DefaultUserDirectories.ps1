@@ -111,7 +111,7 @@ function Move-FolderData {
         $initialContents = Get-ChildItem -Recurse -Path $initialDirectory
         $targetContents = Get-ChildItem -Recurse -Path $targetDirectory
         $copyResults = Compare-Object $initialContents $targetContents -Property Name
-        if(!$copyResults){
+        if (!$copyResults) {
             Write-Log -Text "All data moved from $initialDirectory to $targetDirectory." Type LOG
             Remove-Item $initialDirectory -Force -Recurse
         }
@@ -147,39 +147,39 @@ Select-Object   @{name = "SID"; expression = { $_.PSChildName } },
 @{name = "UserHive"; expression = { "$($_.ProfileImagePath)\ntuser.dat" } },
 @{name = "Username"; expression = { $_.ProfileImagePath -replace '^(.*[\\\/])', '' } },
 ProfileImagePath
-    $LoadedHives = Get-ChildItem Registry::HKEY_USERS | Where-Object { $_.PSChildname -match $PatternSID } | Select-Object @{name = "SID"; expression = { $_.PSChildName } }
-    if ($LoadedHives) {
-        $UnloadedHives = Compare-Object $ProfileList.SID $LoadedHives.SID | Select-Object @{name = "SID"; expression = { $_.InputObject } }, UserHive, Username, ProfileImagePath
+$LoadedHives = Get-ChildItem Registry::HKEY_USERS | Where-Object { $_.PSChildname -match $PatternSID } | Select-Object @{name = "SID"; expression = { $_.PSChildName } }
+if ($LoadedHives) {
+    $UnloadedHives = Compare-Object $ProfileList.SID $LoadedHives.SID | Select-Object @{name = "SID"; expression = { $_.InputObject } }, UserHive, Username, ProfileImagePath
+}
+else {
+    $UnloadedHives = $ProfileList
+}
+foreach ($profile in $profileList) {
+    IF ($profile.SID -in $UnloadedHives.SID) {
+        reg load HKU\$($profile.SID) $($profile.UserHive) | Out-Null
     }
-    else {
-        $UnloadedHives = $ProfileList
+    $currentShellFolders = Get-ItemProperty -Path "Registry::HKEY_USERS\$($profile.SID)\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+    if ($profile.SID -in $UnloadedHives.SID) {
+        ### Garbage collection and closing of ntuser.dat ###
+        [gc]::Collect()
+        reg unload HKU\$($profile.SID) | Out-Null
     }
-    foreach ($profile in $profileList) {
-        IF ($profile.SID -in $UnloadedHives.SID) {
-            reg load HKU\$($profile.SID) $($profile.UserHive) | Out-Null
-        }
-        $currentShellFolders = Get-ItemProperty -Path "Registry::HKEY_USERS\$($profile.SID)\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
-        if ($profile.SID -in $UnloadedHives.SID) {
-            ### Garbage collection and closing of ntuser.dat ###
-            [gc]::Collect()
-            reg unload HKU\$($profile.SID) | Out-Null
-        }
-        Set-AllProfileFolders -sid $profile.SID -userProfileDirectory $profile.ProfileImagePath
-        if ($MoveData
-) {
-            foreach ($folder in $profileFolderNames) {
-                $previousShellFolderPath = $currentShellFolders.$folder
-                $targetFolder = $null
-                switch ($folder) {
-                    "My Video" { $targetFolder = "Videos" }
-                    "Desktop" { $targetFolder = "Desktop" }
-                    "{374DE290-123F-4565-9164-39C4925E467B}" { $targetFolder = "Downloads" }
-                    "Personal" { $targetFolder = "Documents" }
-                    "My Music" { $targetFolder = "Music" }
-                    "My Pictures" { $targetFolder = "Pictures" }
-                    Default {}
-                }
-                Move-FolderData -initialDirectory $previousShellFolderPath -targetDirectory "$($profile.ProfileImagePath)\$targetFolder"
+    Set-AllProfileFolders -sid $profile.SID -userProfileDirectory $profile.ProfileImagePath
+    if ($MoveData
+    ) {
+        foreach ($folder in $profileFolderNames) {
+            $previousShellFolderPath = $currentShellFolders.$folder
+            $targetFolder = $null
+            switch ($folder) {
+                "My Video" { $targetFolder = "Videos" }
+                "Desktop" { $targetFolder = "Desktop" }
+                "{374DE290-123F-4565-9164-39C4925E467B}" { $targetFolder = "Downloads" }
+                "Personal" { $targetFolder = "Documents" }
+                "My Music" { $targetFolder = "Music" }
+                "My Pictures" { $targetFolder = "Pictures" }
+                Default {}
             }
+            Move-FolderData -initialDirectory $previousShellFolderPath -targetDirectory "$($profile.ProfileImagePath)\$targetFolder"
         }
     }
+}
