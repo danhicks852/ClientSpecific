@@ -1,8 +1,0 @@
-2022-03-10 15:50:40  INIT     -----------------------------------------------
-2022-03-10 15:50:40  INIT     Confirm-LocalUserAccount
-2022-03-10 15:50:40  INIT     System: PRLPTUS-04
-2022-03-10 15:50:40  INIT     User: dan.hicks
-2022-03-10 15:50:40  INIT     OS Bitness: AMD64
-2022-03-10 15:50:40  INIT     PowerShell Bitness: 64
-2022-03-10 15:50:40  INIT     PowerShell Version: 2021
-2022-03-10 15:50:40  INIT     -----------------------------------------------
