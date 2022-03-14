@@ -139,6 +139,8 @@ function Set-AllProfileFolders {
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "My Music" -SID $sid -Value "$userProfileDirectory\Music" -PropertyType DWORD -ErrorAction SilentlyContinue
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "{374DE290-123F-4565-9164-39C4925E467B}" -SID $sid -Value "$userProfileDirectory\Downloads" -PropertyType DWORD -ErrorAction SilentlyContinue
     Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "Personal" -SID $sid -Value "$userProfileDirectory\Documents" -PropertyType DWORD -ErrorAction SilentlyContinue
+    Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "AppData" -SID $sid -Value "$userProfileDirectory\Application Data" -PropertyType DWORD -ErrorAction SilentlyContinue
+    Set-HKURegistryEntries -RelativeKey $shellFolderKey -Name "Favorites" -SID $sid -Value "$userProfileDirectory\Favorites" -PropertyType DWORD -ErrorAction SilentlyContinue
 }
 $patternSID = '((S-1-5-21)|(S-1-12-1))-\d+-\d+\-\d+\-\d+$'
 $profileFolderNames = @('My Video', 'Desktop', 'My Pictures', 'My Music', '{374DE290-123F-4565-9164-39C4925E467B}', 'Personal')

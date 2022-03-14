@@ -21,13 +21,28 @@ else {
 }
 ### Process ###
 #endregion template
+Write-Log -Text "Checking OS for compatiblity" -Type LOG
 $biosCheck = Confirm-SecureBootUEFI
-if ($biosCheck -eq 'Cmdlet not supported on this platform') {
+if (!($biosCheck)) {
+    Write-Log -Text $biosCheck -Type ERROR
     Write-Log -Text "This script is only supported on UEFI Enabled Machines" -Type ERROR
     break
 }
-Install-Module -Name PowerShellGet  -Force
-Install-Module -Name PowerShellGet -SkipPublisherCheck -Force
-Install-Module -Name HPCMSL -AcceptLicense
-$resultCapture = $(Get-HPBIOSUpdates -Latest -Flash -Yes -Quiet) 6>&1
-Write-Log -Text $resultCapture -Type LOG
+Write-Log -Text "System is supported." -Type LOG
+Write-Log -Text "Installing PowerShellGet" -Type LOG
+Install-Module -Name PowerShellGet -Force -ErrorAction SilentlyContinue
+Write-Log -Text "Importing PowerShellGet" -Type LOG
+Install-Module -Name PowerShellGet -SkipPublisherCheck -Force -ErrorAction SilentlyContinue
+Write-Log -Text "Installing HP Tools" -Type LOG
+Install-Module -Name HPCMSL -Force -AcceptLicense
+Write-Log -Text "Modules installed, beginning update"
+try {
+    $output = (Get-HPBIOSUpdates -Flash -Yes) 2>&1
+    Write-Log -Text "$output"
+}
+catch {
+    Write-Log -Text "An error occurred during BIOS Update: $output" -Type ERROR
+}
+Write-Log -Text "Complete." -TYPE LOG
+#$testResult = Get-HPBIOSVersion
+#Write-Log -Text $testResult -Type DATA
