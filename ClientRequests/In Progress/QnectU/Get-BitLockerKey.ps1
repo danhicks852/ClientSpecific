@@ -11,12 +11,7 @@
     Additional script notes here.
 #>
 #Configure Paramaters and validate input if needed.
-[CmdletBinding()]
-param (
-    [Parameter(Mandatory)]
-    [ValidatePattern('regex')]
-    [string]$param
-)
+
 ### Bootstrap ###
 #The bootstrap loads Logging, Chocolatey, environment paths, common variables, powershell updates. It should be included on ALL ProVal powershell scripts developed.
 if (-not $bootstrapLoaded) {
@@ -29,3 +24,16 @@ else {
 }
 ### Process ###
 #endregion template
+
+$keyProt = (Get-BitLockerVolume -MountPoint C).KeyProtector
+if(!($keyProt.RecoveryPassword)){
+    if($keyProt.KeyProtectorType -eq 'TPM'){
+        Write-Log -Text 'TPM-Only, No Key' -TYPE DATA
+    }
+    else{
+        Write-Log -Text 'No Key Found' -TYPE DATA
+    }
+}
+else{
+    Write-Log -Text $keyProt.RecoveryPassword -TYPE DATA
+}

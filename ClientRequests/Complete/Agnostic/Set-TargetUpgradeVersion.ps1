@@ -35,20 +35,20 @@ else {
 }
 #endregion
 ### Process ###
+
 #Check if build is >2004 
+Write-Log -Text "Checking OS for compatiblity" -Type LOG
 if (!([System.Environment]::OSVersion.Version.Build -In 19041..19044)) {
     Write-Log -Text "This script is only compatible with Windows 10 versions at or above 2004. Aborting." -Type ERROR
     break
 }
-else { Write-Log -Text "Windows 10 Build is supported." }
+Write-Log -Text "Windows 10 Build is supported." -Type LOG
 #set vars
 $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate"
-$regNames = [PSCustomObject]@{
-    Name  = "TargetReleaseVersion"
-    Type  = "DWORD"
-    Value = 1
-}
-$regNames | Add-Member -MemberType NoteProperty -Name "TargetReleaseVersionInfo" -Type "MultiString" -Value $Version
+$regNames = @()
+$regNames += New-Object -TypeName PSCustomObject -Property @{RegName="TargetReleaseVersionInfo"; RegType="MultiString"; RegValue="$version"}
+$regNames += New-Object -TypeName PSCustomObject -Property @{RegName="TargetReleaseVersion"; RegType="DWORD"; RegValue="1"}
+
 function Test-RegExists($Path, $Name) {
     $test = Get-ItemProperty -Path $Path -Name $Name -ErrorAction SilentlyContinue
     return $test
@@ -56,24 +56,26 @@ function Test-RegExists($Path, $Name) {
 if ($Undo) {
     Write-Log -Text "Removal specified at run time. Removing Target Release Version Settings." -Type LOG
     foreach ($name in $regNames) {
-        Test-RegExists -Path $regPath -Name $name
-        if (!($test)) {
-            Write-Log -Text "$name key does not exist, aborting." -Type ERROR
-            break
+        $funcTest = Test-RegExists -Path $regPath -Name $name.RegName
+        if (!($funcTest)) {
+            Write-Log -Text "key does not exist, aborting." -Type ERROR
         }
         else {
-            Remove-ItemProperty -Path $regpath -Name $name
+            Remove-ItemProperty -Path $regpath -Name $name.RegName
         }
-        break
     }
+    break
 }
 foreach ($name in $regNames) {
-    Test-RegExists -Path $regPath -Name $name
-    if (!($test)) {     
-        New-ItemProperty -Path $regpath -Name $name.Name -Value $name.Value -Type name.Type
+    $funcTest = Test-RegExists -Path $regPath -Name $name.RegName
+    if (!($funcTest)) {     
+        New-ItemProperty -Path $regpath -Name $name.RegName -Value $name.RegValue -Type $name.RegType
+    }
+    else {
+        Write-Log -Text "The key already exists in the registry. Overwriting" -Type LOG
+        Set-ItemProperty -Path $regpath -Name $name.RegName -Value $name.RegValue -Type $name.RegType
     }
 }
-else {
-    Write-Log -Text "The key already exists in the registry. Overwriting" -Type LOG
-    Set-ItemProperty -Path $regpath -Name $name.Name -Value $name.Value -Type name.Type
-}
+
+
+

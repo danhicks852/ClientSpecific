@@ -1,22 +1,16 @@
 #region template
 <#
 .SYNOPSIS
-    Briefly Describe the script
+    Checks for a local user and writes the result to data log
 .EXAMPLE
-    How to run the script
-    c:\> Get-ScriptTemplate.ps1 -param 123
-.PARAMETER -param
-    Describe each paramater your script uses
+    c:\> Confirm-LocalUserAccount.ps1 -username USER
+.PARAMETER -username
+    Provide the local user name to check against
 .NOTES
-    Additional script notes here.
+    Written by Dan Hicks @ ProvalTech for MBTech
 #>
 #Configure Paramaters and validate input if needed.
-[CmdletBinding()]
-param (
-    [Parameter(Mandatory)]
-    [ValidatePattern('regex')]
-    [string]$param
-)
+
 ### Bootstrap ###
 #The bootstrap loads Logging, Chocolatey, environment paths, common variables, powershell updates. It should be included on ALL ProVal powershell scripts developed.
 if (-not $bootstrapLoaded) {
@@ -29,3 +23,16 @@ else {
 }
 ### Process ###
 #endregion template
+$groupMembers = Get-LocalGroupMember -Name Administrators
+foreach ($member in $groupMembers){
+    if ($member.Name -like 'RANKEN\S_IT'){
+        $found = 1
+    }
+}
+
+if (!($found)) {
+    write-log -text "S_IT not found." -Type DATA
+}
+else {
+    write-log -text "S_IT exists on this endpoint." -DATA
+}
