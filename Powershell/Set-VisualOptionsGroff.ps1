@@ -139,8 +139,4 @@ foreach ($profile in $profileList) {
     Set-HKURegistryEntries -RelativeKey 'Control Panel\Desktop\' -Name "UserPreferencesMask" -SID $profile.sid -Value ([byte[]](0x90,0x12,0x03,0x80,0x10,0x00,0x00,0x00)) -PropertyType Binary -ErrorAction SilentlyContinue
 
 }
-& net stop themes
-& net start themes
-& taskkill /f /im explorer.exe
-& explorer.exe
 
