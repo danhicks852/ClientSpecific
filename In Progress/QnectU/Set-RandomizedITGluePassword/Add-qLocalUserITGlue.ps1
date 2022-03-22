@@ -1,17 +1,3 @@
-#region template
-<#
-.SYNOPSIS
-    Briefly Describe the script
-.EXAMPLE
-    How to run the script
-    c:\> Get-ScriptTemplate.ps1 -param 123
-.PARAMETER -param
-    Describe each paramater your script uses
-.NOTES
-    Additional script notes here.
-#>
-#Configure Paramaters and validate input if needed.
-
 [CmdletBinding()]
 param (
     [Parameter(Mandatory = $false)][string] $username,
@@ -31,11 +17,11 @@ if (-not $bootstrapLoaded) {
 #endregion template
 
 $version = '1.0.2.0'
-$username = 'ENTER USERNAME'
-$portal_client_code = 'ENTER YOUR PORTAL CLIENT CODE'
-$itglue_client_id = 'ENTER ITGLUE CLIENT ID'
+$username = 'qlocal'
+$portal_client_code = 'E721A-4BE8-92AA'
+# $itglue_client_id = 'ENTER ITGLUE CLIENT ID' (passed in via param)
 $computer_name_prefix = 'PC-'
-$password_len = 18
+$password_len = 24
 Write-Log -Text "`n#################################################`n#`n# input values:`n#`tusername: $username`n#`tportal client code: $portal_client_code`n#`titglue client location ID: $itglue_client_id`n#`n# if any of these values are incorrect or missing`n# change them within the script`n#`n#################################################`n`n"
 
 # encodes utf8 to base64
@@ -203,7 +189,7 @@ function Get-UrlStatusCode() {
         }
     } catch [System.Net.WebException] {
         Write-Log -Text 'invoke-webrequest failed: local admin user not uploaded to itglue, local admin not created on machine' -TYPE LOG
-        Write-Log "$_.Exception.Response" -TYPE ERROR
+        Write-Log -Text "$_.Exception.Response" -TYPE ERROR
         exit 1
     }
 }

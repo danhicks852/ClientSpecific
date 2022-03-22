@@ -26,7 +26,7 @@ function Set-HKURegistryEntries {
         [Parameter(Mandatory = $true)][string]$SID,
         [Parameter(Mandatory = $true)][string]$RelativeKey,
         [Parameter(Mandatory = $true)][string]$Name,
-        [Parameter(Mandatory = $true)][string]$Value,
+        [Parameter(Mandatory = $true)][object]$Value,
         [Parameter(Mandatory = $true)]
         [ValidateSet("String", "ExpandString", "Binary", "DWord", "MultiString", "QWord", "Unknown")]
         [string]$PropertyType
@@ -56,14 +56,14 @@ function Set-HKURegistryEntries {
         $foundItem = Get-ItemProperty -Path $itemPath -Name $Name -ErrorAction SilentlyContinue | Select-Object -ExpandProperty $Name
         if ($foundItem) {
             # If the entry already exists, then set it.
-            Set-ItemProperty -Path $itemPath -Name $Name -Value $Value -ErrorAction SilentlyContinue
+            Set-ItemProperty -Path $itemPath -Name $Name -Value $Value -Type $PropertyType -ErrorAction SilentlyContinue
         }
         else {
             # If the entry does not exist, then create it.
             New-ItemProperty -Path $itemPath -Name $Name -Value $Value -PropertyType $PropertyType -Force -ErrorAction SilentlyContinue
         }
         $foundItem = Get-ItemProperty -Path $itemPath -Name $Name -ErrorAction SilentlyContinue | Select-Object -ExpandProperty $Name
-        if ($foundItem -eq $Value) {
+        if (($foundItem -join ',') -eq ($Value -join ',')) {
             $editedItems += Get-ItemProperty -Path $itemPath -Name $Name
         }
         else {
@@ -103,7 +103,44 @@ foreach ($profile in $profileList) {
         [gc]::Collect()
         reg unload HKU\$($profile.SID) | Out-Null
     }
-    Set-HKURegistryEntries -RelativeKey "Control Panel\Desktop\" -Name "FontSmoothing" -SID $profile.sid -Value "2" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #set all disabled
+    #Set-HKURegistryEntries -RelativeKey "Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\" -Name "VisualFXSetting" -SID $profile.sid -Value "2" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #set custom
+    Set-HKURegistryEntries -RelativeKey "Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\" -Name "VisualFXSetting" -SID $profile.sid -Value "3" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #set FontSmoothing Enabled
+    Set-HKURegistryEntries -RelativeKey "Control Panel\Desktop\" -Name "FontSmoothing" -SID $profile.sid -Value "2" -PropertyType String -ErrorAction SilentlyContinue
+    #set ListViewShadow Enabled
     Set-HKURegistryEntries -RelativeKey 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\' -Name "ListviewShadow" -SID $profile.sid -Value "1" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #set Animate Windows Disabled
+    Set-HKURegistryEntries -RelativeKey 'Control Panel\Desktop\WindowMetrics' -Name "MinAnimate" -SID $profile.sid -Value "0" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #set dragContents Disabled
+    Set-HKURegistryEntries -RelativeKey 'Control Panel\Desktop\' -Name "DragFullWindows" -SID $profile.sid -Value "0" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #set Taskbar Animation Disabled
+    Set-HKURegistryEntries -RelativeKey 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\' -Name "TaskbarAnimations" -SID $profile.sid -Value "0" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #disable Peek
+    Set-HKURegistryEntries -RelativeKey 'Software\Microsoft\Windows\DWM\' -Name "EnableAeroPeek" -SID $profile.sid -Value "0" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #disablehibernateThumbnail
+    Set-HKURegistryEntries -RelativeKey 'Software\Microsoft\Windows\DWM\' -Name "AlwaysHibernateThumbnails" -SID $profile.sid -Value "0" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #Show thumbnails instead of icons disable
+    Set-HKURegistryEntries -RelativeKey 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\' -Name "IconsOnly" -SID $profile.sid -Value "1" -PropertyType DWORD -ErrorAction SilentlyContinue
+    #Show translucent selection rectangle
+    Set-HKURegistryEntries -RelativeKey 'Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\' -Name "ListviewAlphaSelect" -SID $profile.sid -Value "0" -PropertyType DWORD -ErrorAction SilentlyContinue
+    <#
+    ;This disables the following 8 settings:
+    ;Animate controls and elements inside windows
+    ;Fade or slide menus into view
+    ;Fade or slide ToolTips into view
+    ;Fade out menu items after clicking
+    ;Show shadows under mouse pointer
+    ;Show shadows under windows
+    ;Slide open combo boxes
+    ;Smooth-scroll list boxes
+    #>
+    Set-HKURegistryEntries -RelativeKey 'Control Panel\Desktop\' -Name "UserPreferencesMask" -SID $profile.sid -Value ([byte[]](0x90,0x12,0x03,0x80,0x10,0x00,0x00,0x00)) -PropertyType Binary -ErrorAction SilentlyContinue
+
 }
+& net stop themes
+& net start themes
+& taskkill /f /im explorer.exe
+& explorer.exe
 
