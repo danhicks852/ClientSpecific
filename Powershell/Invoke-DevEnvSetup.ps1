@@ -1,6 +1,39 @@
 <#
 .SYNOPSIS
     New Laptop Setup
+    Performs the following:
+    -Removes Pre-installed AppXPackages that are generally unneeded
+    -Installs commonly used software
+    ---Chrome
+    ---adobereader
+    ---obs-studio
+    ---audacity
+    ---dotpeek
+    ---microsoft-windows-terminal
+    ---vscode
+    ---gsudo
+    ---git
+    ---zoom
+    ---parsec
+    ---treesizefree
+    ---greenshot
+    ---ditto   
+    -Installs and configured Hyper-V Host for dev environment
+    -Installs several pieces of software from included binary
+    ---Office
+    ---Tailscale
+    ---OpenVPN
+    ---Kaseya Agent
+    ---Downloads and installs Visual Studio 2022 Community
+    -Configures Git, Posh Git, nuget
+    -Sets Timezone to EST
+    -Sets Power plan to high performance
+    -Removes Cortana, Search, news&interests from taskbar
+    -Enables small icons on taskbar
+    -Enables hidden files and file extensions in explorer
+    -Sets Dark Mode windows theme
+    -Clears desktop icons
+    -Empties recycle bin
 .EXAMPLE
     c:\>InvokeDevEnvSetup
 .NOTES
@@ -43,36 +76,36 @@ Get-AppxPackage -name "Microsoft.BingSports" | Remove-AppxPackage
 Get-AppxPackage -name "Microsoft.BingTravel" | Remove-AppxPackage
 Get-AppxPackage -name "Microsoft.BingFoodAndDrink" | Remove-AppxPackage
 Get-AppxPackage -name "Microsoft.BingHealthAndFitness" | Remove-AppxPackage
-#general software installations. TODO: Chrome and Tailscale fail.
-#choco install `
-#    googlechrome `
-#    adobereader `
-#    obs-studio `
-#    audacity `
-#    dotpeek `
-#    microsoft-windows-terminal `
-#    vscode `
-#    gsudo `
-#    git `
-#    zoom `
-#    parsec `
-#    treesizefree `
-#    greenshot `
-#    ditto    
-#Start-Process './OfficeSetup.exe' -Wait
-#Start-Process './openvpn-Prod2-PFSense-UDP4-1194-dan.hicks-install-2.5.2-I601-amd64.exe' -Wait
-#Start-Process './KcsSetup.exe' -Wait
-#Start-Process './tailscale-ipn-setup-1.22.2.exe' -wait
+#general software installations.
+choco install `
+    googlechrome `
+    adobereader `
+    obs-studio `
+    audacity `
+    dotpeek `
+    microsoft-windows-terminal `
+    vscode `
+    gsudo `
+    git `
+    zoom `
+    parsec `
+    treesizefree `
+    greenshot `
+    ditto  `
+Start-Process './OfficeSetup.exe' -Wait
+Start-Process './openvpn-Prod2-PFSense-UDP4-1194-dan.hicks-install-2.5.2-I601-amd64.exe' -Wait
+Start-Process './KcsSetup.exe' -Wait
+Start-Process './tailscale-ipn-setup-1.22.2.exe' -wait
 Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_Community.exe" -OutFile ./vs.exe
 Start-Process './vs.exe' -wait
 #Install Hyper-V
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
 #git setup
+refreshenv
+$env:path+='C:\Program Files\Git\cmd'
 Install-PackageProvider -Name NuGet -Force
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Install-Module -Name "posh-git"
-refreshenv
-$env:path+='C:\Program Files\Git\cmd'
 $profileAppendPosh = 'Import-Module -Name "posh-git"'
 $profileAppendSudo = 'Set-Alias sudo gsudo'
 $profileAppendPosh | Out-File -Encoding Ascii -append "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
