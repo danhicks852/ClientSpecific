@@ -58,7 +58,9 @@
     ---Empties recycle bin
     Will invoke a reboot at the end of the script.
 .EXAMPLE
-    c:\>InvokeDevEnvSetup.ps1 -RemoveBloatware -InstallSoftware -InstallCustomSoftware -EnableHyperV -SetupGit -SetupPrefs
+    c:\>InvokeDevEnvSetup.ps1 -RemoveBloatware -InstallCustomSoftware
+    C:\>InvokeDevEnvSetup.ps1 -All
+
 .NOTES
     Dan's Laptop setup, preferences, and more 
 #>
@@ -69,7 +71,8 @@ param (
     [Parameter(Mandatory = $false)][switch]$InstallCustomSoftware,
     [Parameter(Mandatory = $false)][switch]$EnableHyperV,
     [Parameter(Mandatory = $false)][switch]$SetupGit,
-    [Parameter(Mandatory = $false)][switch]$SetupPrefs
+    [Parameter(Mandatory = $false)][switch]$SetupPrefs,
+    [Parameter(Mandatory = $false)][switch]$All
 )
 ### Bootstrap ###
 #The bootstrap loads Logging, Chocolatey, environment paths, common variables, powershell updates. It should be included on ALL ProVal powershell scripts developed.
@@ -162,6 +165,7 @@ function Set-UserPrefs {
     Set-ExplorerAdvancedOption -Name 'TaskbarSmallIcons' -Value 1
     Set-ExplorerAdvancedOption -Name 'Hidden' -Value 1
     Set-ExplorerAdvancedOption -Name 'HideFileExt' -Value 0
+    Set-AllNetworksPrivate
     Remove-Item $env:USERPROFILE\Desktop\* -Force -Confirm:$false
     Clear-RecycleBin -Force -Confirm:$false
     $rebootNeeded = 1
@@ -240,18 +244,33 @@ $PendingReboot = $true
    }
    return $PendingReboot
 }
+function Invoke-Cleanup{
+    Write-Log -Text 'The selected Modules have been completed.'
+    Get-PendingReboots
+    if ($PendingReboot) { 
+        Write-Log -Text 'A reboot is pending on this machine after setup. This machine will now be restarted. Press enter to continue.' -LOG
+        Read-Host
+        Restart-Computer 
+    }
+}
 #logic
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+if ($All) {
+    Invoke-BloatwareCleanup
+    Install-GeneralSoftware
+    Install-CustomSoftware
+    Enable-HyperV
+    Invoke-GitSetup
+    Set-UserPrefs
+    Invoke-Cleanup
+    break
+}
+else{
 if ($RemoveBloatware) { Invoke-BloatwareCleanup }
 if ($InstallSoftware) { Install-GeneralSoftware }
 if ($InstallCustomSoftware) { Install-CustomSoftware }
 if ($EnableHyperV) { Enable-HyperV }
 if ($SetupGit) { Invoke-GitSetup }
 if ($SetupPrefs) { Set-UserPrefs }
-Write-Log -Text 'The selected Modules have been completed.'
-Get-PendingReboots
-if ($PendingReboot) { 
-    Write-Log -Text 'A reboot is pending on this machine after setup. This machine will now be restarted. Press enter to continue.' -LOG
-    Read-Host
-    Restart-Computer 
+Invoke-Cleanup
 }
