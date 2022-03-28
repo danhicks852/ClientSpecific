@@ -146,7 +146,7 @@ function Install-GeneralSoftware {
         greenshot `
         ditto  `
         $env:path += 'C:\Program Files\Git\cmd'
-        Write-Log -Text 'General Software Installation complete. Git env:path updated for the session.' -Type DATA
+    Write-Log -Text 'General Software Installation complete. Git env:path updated for the session.' -Type DATA
 }
 function Install-CustomSoftware {
     Write-Log -Text 'Custom software installation selected. Processing items in CustomInstalls directory.' -Type DATA
@@ -221,80 +221,68 @@ function Set-UserPrefs {
     return $rebootNeeded
     Write-Log -Text 'User Preference settings complete.' -Type DATA
 }
-function Set-AllNetworksPrivate{
+function Set-AllNetworksPrivate {
     $netProfiles = Get-NetConnectionProfile
-    foreach ($profile in $netProfiles){
+    foreach ($profile in $netProfiles) {
         Set-NetConnectionProfile -Name $profile.Name -networkCategory Private
     }
 }
 function Test-RegistryValue {
     param (
-     [parameter(Mandatory=$true)][ValidateNotNullOrEmpty()]$Path,
-     [parameter(Mandatory=$true)] [ValidateNotNullOrEmpty()]$Value
+        [parameter(Mandatory = $true)][ValidateNotNullOrEmpty()]$Path,
+        [parameter(Mandatory = $true)] [ValidateNotNullOrEmpty()]$Value
     )
     try {
-     Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
-     return $true
+        Get-ItemProperty -Path $Path | Select-Object -ExpandProperty $Value -ErrorAction Stop | Out-Null
+        return $true
     }
     catch {
-     return $false
+        return $false
     }
-   }
-function Get-PendingReboots {
-   [bool]$PendingReboot = $false
-   #Check for Keys
-   If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") -eq $true)
-   {
-$PendingReboot = $true
-   }
-   If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\PostRebootReporting") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\ServerManager\CurrentRebootAttempts") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   #Check for Values
-   If ((Test-RegistryValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Component Based Servicing" -Value "RebootInProgress") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-RegistryValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Component Based Servicing" -Value "PackagesPending") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager" -Value "PendingFileRenameOperations") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager" -Value "PendingFileRenameOperations2") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-RegistryValue -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" -Value "DVDRebootSignal") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon" -Value "JoinDomain") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon" -Value "AvoidSpnSet") -eq $true)
-   {
-    $PendingReboot = $true
-   }
-   return $PendingReboot
 }
-function Invoke-Cleanup{
+function Get-PendingReboots {
+    [bool]$PendingReboot = $false
+    #Check for Keys
+    If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\PostRebootReporting") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-Path -Path "HKLM:\SOFTWARE\Microsoft\ServerManager\CurrentRebootAttempts") -eq $true) {
+        $PendingReboot = $true
+    }
+    #Check for Values
+    If ((Test-RegistryValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Component Based Servicing" -Value "RebootInProgress") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-RegistryValue -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Component Based Servicing" -Value "PackagesPending") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager" -Value "PendingFileRenameOperations") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager" -Value "PendingFileRenameOperations2") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-RegistryValue -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce" -Value "DVDRebootSignal") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon" -Value "JoinDomain") -eq $true) {
+        $PendingReboot = $true
+    }
+    If ((Test-RegistryValue -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon" -Value "AvoidSpnSet") -eq $true) {
+        $PendingReboot = $true
+    }
+    return $PendingReboot
+}
+function Invoke-Cleanup {
     Write-Log -Text 'The selected Modules have been completed.' -TYPE LOG
     Get-PendingReboots
     if ($PendingReboot) { 
@@ -312,17 +300,17 @@ if ($All) {
     Enable-HyperV
     Invoke-GitSetup
     Set-UserPrefs
-    Write-Log -Text 'All done, cleaning up and rebooting.' -Type DATA
+    Write-Log -Text 'All done, cleaning up and rebooting.' -Type LOG
     Invoke-Cleanup
     break
 }
-else{
-if ($RemoveBloatware) { Invoke-BloatwareCleanup }
-if ($InstallSoftware) { Install-GeneralSoftware }
-if ($InstallCustomSoftware) { Install-CustomSoftware }
-if ($EnableHyperV) { Enable-HyperV }
-if ($SetupGit) { Invoke-GitSetup }
-if ($SetupPrefs) { Set-UserPrefs }
-Write-Log -Text 'All done, cleaning up and checking to see if a reboot is required.' -Type DATA
-Invoke-Cleanup
+else {
+    if ($RemoveBloatware) { Invoke-BloatwareCleanup }
+    if ($InstallSoftware) { Install-GeneralSoftware }
+    if ($InstallCustomSoftware) { Install-CustomSoftware }
+    if ($EnableHyperV) { Enable-HyperV }
+    if ($SetupGit) { Invoke-GitSetup }
+    if ($SetupPrefs) { Set-UserPrefs }
+    Write-Log -Text 'All done, cleaning up and checking to see if a reboot is required.' -TypeLOG
+    Invoke-Cleanup
 }
