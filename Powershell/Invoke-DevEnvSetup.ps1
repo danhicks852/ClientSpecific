@@ -153,7 +153,7 @@ function Install-CustomSoftware {
     Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vs_Community.exe" -OutFile ./CustomInstallers/vs.exe
     Write-Log -Text 'Visual Studio 2022 Community Installer downloaded.' -Type LOG
     foreach ($installers in (Get-ChildItem ./CustomInstallers)) {
-        Start-Process $installer.Name -Wait
+        Start-Process -FilePath "./CustomInstallers/"$installer.Name -Wait
         Write-Log -Text "$installer.Name Installed." -Type LOG
     }
     Write-Log -Text 'Custom software installation complete.' -Type DATA
