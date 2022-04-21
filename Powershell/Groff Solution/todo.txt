@@ -1,0 +1,6 @@
+
+
+Create a procedure to perform the following functions
+
+-Run the Dell Software update procedure.
+-Unpin all apps

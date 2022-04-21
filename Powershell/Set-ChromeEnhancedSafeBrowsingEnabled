@@ -1,22 +1,14 @@
-#region template
+#region Template
 <#
 .SYNOPSIS
-    Briefly Describe the script
+    Updates UEFI HP Machine to latest firmware version
 .EXAMPLE
-    How to run the script
-    c:\> Get-ScriptTemplate.ps1 -param 123
-.PARAMETER -param
-    Describe each paramater your script uses
+    C:\>./Invoke-BIOSUpgradeHP.ps1
 .NOTES
-    Additional script notes here.
+    Written by Dan Hicks of ProVal Technologies for Sysintegrators
 #>
 #Configure Paramaters and validate input if needed.
-[CmdletBinding()]
-param (
-    [Parameter(Mandatory)]
-    [ValidatePattern('regex')]
-    [string]$param
-)
+#no params needed
 ### Bootstrap ###
 #The bootstrap loads Logging, Chocolatey, environment paths, common variables, powershell updates. It should be included on ALL ProVal powershell scripts developed.
 if (-not $bootstrapLoaded) {
@@ -27,5 +19,5 @@ if (-not $bootstrapLoaded) {
 else {
     Write-Log -Text "Bootstrap already loaded." -Type INIT
 }
-### Process ###
-#endregion template
+New-Item -Path "HKLM:\Software\Policies\Google\Chrome" -Force
+Set-ItemProperty -Path "HKLM:\Software\Policies\Google\Chrome" -Name SafeBrowsingProtectionLevel -Type DWORD -Value 2 -Force

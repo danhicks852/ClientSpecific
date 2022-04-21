@@ -160,7 +160,7 @@ function Install-CustomSoftware {
 }
 function Enable-HyperV {
     Write-Log -Text 'Hyper-V Setup selected. Processing...' -Type DATA
-    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart
+      -NoRestart
     $rebootNeeded = 1
     return $rebootNeeded
     Write-Log -Text 'Hyper-V Setup complete.' -Type DATA
