@@ -1,0 +1,19 @@
+2022-04-22 11:27:17  INIT     -----------------------------------------------
+2022-04-22 11:27:17  INIT     Invoke-SentinelOneRollbackPrep
+2022-04-22 11:27:17  INIT     System: PRLPTUS-04
+2022-04-22 11:27:17  INIT     User: dan.hicks
+2022-04-22 11:27:17  INIT     OS Bitness: AMD64
+2022-04-22 11:27:17  INIT     PowerShell Bitness: 64
+2022-04-22 11:27:17  INIT     PowerShell Version: 2021
+2022-04-22 11:27:17  INIT     -----------------------------------------------
+2022-04-22 11:27:54  INIT     Bootstrap already loaded.
+2022-04-22 11:28:08  INIT     Bootstrap already loaded.
+2022-04-22 11:28:24  INIT     Bootstrap already loaded.
+2022-04-22 11:29:12  INIT     Bootstrap already loaded.
+2022-04-22 12:06:24  INIT     Bootstrap already loaded.
+2022-04-22 12:06:25  LOG      Shadow Storage already configured correctly for 10% Max Space
+2022-04-22 12:06:41  INIT     Bootstrap already loaded.
+2022-04-22 12:06:41  LOG      Shadow Storage already configured correctly for 10% Max Space
+2022-04-22 12:06:41  LOG      Sentinel One Configuration skipped. Process complete.
+2022-04-22 12:07:02  INIT     Bootstrap already loaded.
+2022-04-22 12:07:02  LOG      Shadow Storage already configured correctly for 10% Max Space
