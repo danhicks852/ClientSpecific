@@ -1,0 +1,2 @@
+Sophos Service Windows Time found on the system in state Running.
+Sophos Service Windows Search found on the system in state Running.

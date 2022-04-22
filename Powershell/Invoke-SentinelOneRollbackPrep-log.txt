@@ -17,3 +17,12 @@
 2022-04-22 12:06:41  LOG      Sentinel One Configuration skipped. Process complete.
 2022-04-22 12:07:02  INIT     Bootstrap already loaded.
 2022-04-22 12:07:02  LOG      Shadow Storage already configured correctly for 10% Max Space
+2022-04-22 16:04:19  INIT     Bootstrap already loaded.
+2022-04-22 16:04:19  LOG      Sophos Services Not Found
+2022-04-22 16:06:05  INIT     Bootstrap already loaded.
+2022-04-22 16:06:05  LOG      Windows Search
+2022-04-22 16:07:09  INIT     Bootstrap already loaded.
+2022-04-22 16:07:09  LOG      Windows Search found on the system in state Running
+2022-04-22 16:08:33  INIT     Bootstrap already loaded.
+2022-04-22 16:08:33  Data     Sophos Service Windows Time found on the system in state Running.
+2022-04-22 16:08:33  Data     Sophos Service Windows Search found on the system in state Running.
