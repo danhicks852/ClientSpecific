@@ -38,6 +38,10 @@ function Invoke-SentinelOneConfiguration {
             throw "noPassPhrase"
         }
         $path = Get-ChildItem -Path 'C:\Program Files\SentinelOne\' | Where-Object {$_.Name -match '^sentinel agent'}
+        if(!($path)){
+            Write-Log -Text "Sentinel One is not installed." -Type ERROR
+            throw "notInstalled"
+        }
         $exePath = "C:\Program Files\SentinelOne\$($path.Name)\sentinelctl.exe"
         & $exePath  unprotect -k $SentinelOnePassPhrase
         & $exePath configure -p agent.snapshotIntervalMinutes -v 240
@@ -64,10 +68,12 @@ foreach($volume in $volumes) {
             # Shadow storage needs resize
             if([System.Math]::Round(($volume.SizeRemaining + $shadowstorage.AllocatedSpace) / $volume.Size, 2) -lt .2) {
                 #not enough disk space
-                Write-Log 'Not enough Disk Space available to perform this action. Free up at least 20% disk space to continue.'
+                Write-Log 'Not enough Disk Space available to perform this action. Free up at least 20% disk space to continue.'-Type ERROR
                 throw 'Insufficient Disk Space on Target Drive'
             } else {
+                Write-Log -Text "Available Disk space sufficient for VSS Resize" -Type LOG
                 & vssadmin Resize ShadowStorage /For=$($volume.DriveLetter): /On=$($volume.DriveLetter): /MaxSize=10%
+                Write-Log -Text "ShadowStorage resized to 10% Successfully." -Type LOG
                 Invoke-SentinelOneConfiguration 
             }
         } else {
@@ -76,6 +82,7 @@ foreach($volume in $volumes) {
         }
     } else {
         & "vssadmin add ShadowStorage /For=$($matchingVolume.DriveLetter): /On=$($matchingVolume.DriveLetter): /MaxSize=10%"
+        Write-Log -Text "ShadowStorage added, Max Capacity 10%" -Type LOG
         Invoke-SentinelOneConfiguration 
     }
 }
