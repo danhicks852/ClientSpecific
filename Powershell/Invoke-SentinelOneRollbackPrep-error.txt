@@ -1,4 +1,0 @@
-2022-04-25 14:34:16  ERROR    Authentication was not successful
-2022-04-25 14:34:16  ERROR    @{ResponseCode=4010001; Status=OK; Error=Username or password incorrect.}
-2022-04-25 14:36:39  ERROR    Authentication was not successful
-2022-04-25 14:36:39  ERROR    @{ResponseCode=4010001; Status=OK; Error=Username or password incorrect.}
