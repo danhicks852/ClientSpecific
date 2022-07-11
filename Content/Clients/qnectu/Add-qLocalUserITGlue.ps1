@@ -111,7 +111,7 @@ function encryptRsa {
 # checks for default parameters and if run as admin
 function errorHandler {
     If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
-        Write-Log -Text "You do not have Administrator rights to run this script!`nPlease re-run this script as an Administrator!"  -TYPE ERROR
+        Write-Log -Text "You do not have Administrator rights to run this script!`nPlease re-run this script as an Administrator!" -TYPE ERROR
         exit
     }
     if ($portal_client_code -eq 'ENTER YOUR PORTAL CLIENT CODE') {
